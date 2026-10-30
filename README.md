@@ -12,6 +12,8 @@
 >
 > **No ready-to-flash EFI is distributed yet.** Every machine requires its own configuration and unique identifiers.
 
+![HP ZBook Fury 17 G7 boot drive layout](assets/boot-layout.svg)
+
 ## Exact tested hardware
 
 | Component | Configuration |
