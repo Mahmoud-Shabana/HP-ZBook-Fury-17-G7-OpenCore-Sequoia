@@ -5,6 +5,7 @@ All technical statuses refer to **this particular HP ZBook Fury 17 G7**. Dates a
 ## [Unreleased] — documentation and validation phase
 
 ### Added
+- Explicit GitHub @mentions, reciprocal-link invitations and variant comparison for LongQT-sea, Leo213github08 and kilianbalaguer's archived Fury 15 G7 research.
 - Exact installer source citation, original creator credit, GitHub artifact ID, image size/hash, expiry, and upstream rebuild method.
 - Original OCUSB graphics diagnostic and health audit scripts, safe read-only helpers and an annotated, non-executable historical EFI transfer script.
 - Bilingual Bug Report and Question templates; best-effort maintainer support policy.

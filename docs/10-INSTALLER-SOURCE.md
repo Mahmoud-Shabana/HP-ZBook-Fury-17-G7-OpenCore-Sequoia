@@ -13,6 +13,8 @@
 
 **Credit goes to LongQT-sea for the builder**, and to **Leo213github08** for hosting the exact artifact used in this experiment. This repository documents independent ZBook hardware testing; it is not a fork of either person's code.
 
+For **related HP ZBook Fury hardware references**, see [Kilian's Fury 15 G7 project and the comparison with our Fury 17 G7](14-CREDITS-RELATED-PROJECTS.md). These different devices should not share a generic EFI.
+
 ## Direct link to our exact installer image
 
 | Field | Verified value |

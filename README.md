@@ -46,6 +46,19 @@
 
 This separates **steps actually performed** from actions not yet proven safe or stable. The original macOS download, SHA verification, all publicly safe scripts, and bug-report form are linked above.
 
+
+## Cross-project credits & related Fury builds
+
+| Creator / project | Why we link to it | Relationship |
+| --- | --- | --- |
+| **[@LongQT-sea](https://github.com/LongQT-sea)** · [macos-iso-builder](https://github.com/LongQT-sea/macos-iso-builder) | Original GitHub Actions macOS installer builder used for our disk image | **Upstream tool**, not our laptop EFI |
+| **[@Leo213github08](https://github.com/Leo213github08)** · [exact Sequoia artifact](https://github.com/Leo213github08/macos-iso-builder/actions/runs/40181607639/artifacts/12594984907) | Public workflow artifact from which we downloaded our actual 15.8.1 DMG | **Exact downloaded image** |
+| **[@kilianbalaguer](https://github.com/kilianbalaguer)** · [Fury 15 G7 Hackintosh](https://github.com/kilianbalaguer/HPZBook-Fury-G7-Hackintosh) | Independent **15-inch/i9/4K touchscreen** Fury G7 Hackintosh with a different display stack | **Related hardware reference**, not an interchangeable EFI |
+
+**Thank you to both authors for sharing their work.** Our **Fury 17 G7/i7/1080p/Sequoia** setup is distinct from the **Fury 15 G7/i9/4K/Tahoe** project; don't blindly reuse panel patches. The Fury 15 G7 repository is **archived**, and its maintainer reports having sold the laptop. Reciprocal links on third-party repositories depend on their maintainers' approval.
+
+**[All credits, hardware comparisons and collaboration details →](docs/14-CREDITS-RELATED-PROJECTS.md)**
+
 ## Hardware / verified configuration
 
 | Area | Actual hardware | Observed configuration |

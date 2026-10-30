@@ -42,6 +42,19 @@
 
 **[من تحميل نسخة Sequoia الأصلية وتكوين فلاشة OpenCore، إلى حل الشاشة السوداء وتشغيل التسريع والواي فاي والصوت](docs/13-FULL-INSTALLATION-CASE-STUDY.md)** — مع توضيح الخطوات التي نجحت وما زال تحت الاختبار.
 
+
+## شكر وتقدير وربط المشاريع ببعض
+
+| صاحب المشروع | الرابط | وجه الاستفادة |
+| --- | --- | --- |
+| **[@LongQT-sea](https://github.com/LongQT-sea)** | [macos-iso-builder](https://github.com/LongQT-sea/macos-iso-builder) | **مبتكر أداة إنشاء صور macOS** المستخدمة في تجربتنا |
+| **[@Leo213github08](https://github.com/Leo213github08)** | [رابط نسخة Sequoia 15.8.1 التي حمّلناها بالفعل](https://github.com/Leo213github08/macos-iso-builder/actions/runs/40181607639/artifacts/12594984907) | صاحب الـArtifact الذي نزلنا منه ملف التثبيت |
+| **[@kilianbalaguer](https://github.com/kilianbalaguer)** | [مشروع HP ZBook Fury 15 G7 Hackintosh](https://github.com/kilianbalaguer/HPZBook-Fury-G7-Hackintosh) | تجربة لجهاز **Fury 15 G7 بمعالج i9 وشاشة 4K**، مختلفة عن **Fury 17 G7 i7 وFull HD** عندنا |
+
+**شكر خاص لأصحاب المشاريع على مشاركة تجاربهم مع المجتمع.** الفرق بين مواصفات الأجهزة مهم؛ **EFI الخاص بجهاز Fury 15 G7 مش بالضرورة يناسب جهازنا Fury 17 G7**. مستودع Fury 15 حاليًا مؤرشف، وصاحبه ذكر إنه باع الجهاز، وبالتالي إضافة رابط عكسي عنده تتطلب موافقته وفك الأرشفة.
+
+**[صفحة الروابط المتبادلة والـCredits ومقارنة الجهازين](docs/14-CREDITS-RELATED-PROJECTS.md)**
+
 ## المواصفات المؤكدة
 
 | القطعة | التفاصيل |
