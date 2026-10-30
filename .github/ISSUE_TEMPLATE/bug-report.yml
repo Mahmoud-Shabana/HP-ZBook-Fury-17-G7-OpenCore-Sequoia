@@ -1,0 +1,42 @@
+name: HP ZBook Fury 17 G7 compatibility report
+description: Document a reproducible hardware behavior without sharing private serials or a raw EFI.
+title: "[Compatibility] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This project is device-specific. Please redact serial numbers, MLB, ROM, SystemUUID, tokens and private file paths before sharing.
+  - type: input
+    id: machine
+    attributes:
+      label: Exact laptop model, BIOS and macOS version
+      placeholder: "HP ZBook Fury 17 G7, BIOS S92 ..., macOS ..."
+    validations:
+      required: true
+  - type: input
+    id: panel
+    attributes:
+      label: iGPU PCI ID, panel model and resolution
+      placeholder: "8086:9BC4, LGD063F, 1920x1080"
+    validations:
+      required: false
+  - type: textarea
+    id: symptoms
+    attributes:
+      label: Observed symptoms and reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What was tested, and what worked or failed?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Redacted logs and observations
+      description: No full config.plist, serial IDs or account information.
+    validations:
+      required: false

@@ -1,0 +1,32 @@
+# Privacy: do not accidentally version raw EFI/SMBIOS, backups, installers or logs
+EFI/
+**/EFI/
+**/config.plist
+*.kext/
+*.aml
+*.efi
+*.fd
+*.rom
+*.dmg
+*.iso
+*.7z
+*.zip
+*.log
+*.panic
+*.ioreg
+*.plist
+*.key
+*.p12
+*.p8
+*.mobileprovision
+*.pem
+# User data and staging
+.DS_Store
+Thumbs.db
+__pycache__/
+.venv/
+.env*
+private/
+secrets/
+backups/
+release-staging/
