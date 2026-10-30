@@ -5,6 +5,9 @@ All technical statuses refer to **this particular HP ZBook Fury 17 G7**. Dates a
 ## [Unreleased] — documentation and validation phase
 
 ### Added
+- Exact installer source citation, original creator credit, GitHub artifact ID, image size/hash, expiry, and upstream rebuild method.
+- Original OCUSB graphics diagnostic and health audit scripts, safe read-only helpers and an annotated, non-executable historical EFI transfer script.
+- Bilingual Bug Report and Question templates; best-effort maintainer support policy.
 - Bilingual, visually redesigned project homepage and hardware overview.
 - Reproducible diagnostics, practical FAQ, contribution and privacy policy.
 - Explicit verification gates for repeated LCD backlight starts, cooling, battery, sleep and SATA EFI.

@@ -1,5 +1,13 @@
 # Frequently asked questions
 
+## Where can I download exactly the macOS Sequoia installer used?
+
+The exact image came from **[Leo213github08's GitHub Actions artifact](https://github.com/Leo213github08/macos-iso-builder/actions/runs/40181607639/artifacts/12594984907)**. The original image-building project and instructions belong to **[LongQT-sea](https://github.com/LongQT-sea/macos-iso-builder)**. See [verified image source, size, SHA256 and expiry](10-INSTALLER-SOURCE.md); artifacts are time-limited.
+
+## How can I report a bug and get help?
+
+Open a [Bug Report](https://github.com/Mahmoud-Shabana/HP-ZBook-Fury-17-G7-OpenCore-Sequoia/issues/new?template=bug-report.yml) and describe the exact hardware, the failing boot stage, what you tried, and redacted logs. The maintainer aims to review and respond when available; this is best-effort community support. [Full support policy](11-BUG-REPORTS-AND-SUPPORT.md).
+
 ## Is this a ready-to-install EFI?
 
 **No.** The repository documents one machine's real results. The final USB configuration requires repeated boot stability tests and a private-data audit before an example EFI could even be considered for publication. A config.plist often contains unique SMBIOS identifiers.

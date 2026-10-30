@@ -23,6 +23,23 @@
 >
 > **There is no ready-to-flash EFI release.** Never use another machine's SMBIOS identifiers or overwrite the independent Windows NVMe EFI.
 
+## Original installer download, reproducibility pack & help
+
+> **Want the exact macOS image, not a random download?** We recovered the original artifact from this machine's Windows browser download history, and its size plus SHA-256 match GitHub's own artifact metadata.
+
+| Resource | Direct link |
+| --- | --- |
+| **Original installer-builder author / credit** | **[Tieu Long / LongQT-sea — macos-iso-builder](https://github.com/LongQT-sea/macos-iso-builder)** |
+| **Exact Sequoia 15.8.1 image we used** | **[Download page — GitHub Actions artifact 12594984907](https://github.com/Leo213github08/macos-iso-builder/actions/runs/40181607639/artifacts/12594984907)** |
+| **Image fingerprint** | `1e288befa2e851ece653850cecaf06de8e808e1376b13cf20fc5768699ba146e` |
+| **Full source instructions & expired-link replacement** | **[Verified installer provenance](docs/10-INSTALLER-SOURCE.md)** |
+| **Recovered diagnostics and reproducibility scripts** | **[Script pack](docs/12-SCRIPTS.md)** |
+| **Get help / report problems** | **[Open a Bug Report](https://github.com/Mahmoud-Shabana/HP-ZBook-Fury-17-G7-OpenCore-Sequoia/issues/new?template=bug-report.yml)** |
+
+**Please note:** The artifact's reported expiry is **9 November 2026**. It may require a GitHub login. We include the upstream image-builder workflow for rebuilding an image if the download expires. No macOS installer is hosted here.
+
+**Experiencing the flashlight-only black screen or another hardware issue?** [Open an issue](docs/11-BUG-REPORTS-AND-SUPPORT.md) with redacted hardware details. **The maintainer reviews and replies to bugs when available**; support is best-effort.
+
 ## Hardware / verified configuration
 
 | Area | Actual hardware | Observed configuration |

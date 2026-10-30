@@ -5,6 +5,7 @@ This repo contains **actual diagnostic scripts recovered from the tested OCUSB**
 | File | Purpose | Safety |
 | --- | --- | --- |
 | [macos/mac_graphics_diagnostics.sh](../scripts/macos/mac_graphics_diagnostics.sh) | Graphics and backlight diagnostic used during troubleshooting | Collects logs; report may contain sensitive data; writes to OCUSB only |
+| [macos/zbook_health_audit.sh](../scripts/macos/zbook_health_audit.sh) | Actual Oct 30 system-health/thermals audit used for the report | Collects potentially identifying log; writes to OCUSB or Desktop, read-only hardware |
 | [macos/check-backlight.sh](../scripts/macos/check-backlight.sh) | Read AppleBacklightDisplay, PNLF/GFX0 and boot flags | Read-only |
 | [macos/read-power-health.sh](../scripts/macos/read-power-health.sh) | System power and kext snapshot | Read-only |
 | [macos/verify-ocusb-config.sh](../scripts/macos/verify-ocusb-config.sh) | Check present USB EFI and expected graphics boot flags | Read-only |

@@ -2,6 +2,12 @@
 
 Thank you for helping turn a fragile installation into a reliable, evidence-based compatibility record.
 
+## Open an issue / reporting a bug
+
+Found a problem with an HP ZBook Hackintosh? Use the [Bug Report form](https://github.com/Mahmoud-Shabana/HP-ZBook-Fury-17-G7-OpenCore-Sequoia/issues/new?template=bug-report.yml) to submit repeatable symptoms with relevant, non-sensitive hardware information. The maintainer plans to review and reply to bugs as available; support is best-effort, not guaranteed.
+
+See [bug triage and privacy guidance](docs/11-BUG-REPORTS-AND-SUPPORT.md).
+
 ## Before opening an issue
 
 Please read the [hardware inventory](docs/01-HARDWARE.md), [status matrix](docs/02-WHAT-WORKS.md), and [backlight case study](docs/03-GRAPHICS-BACKLIGHT-FIX.md).
