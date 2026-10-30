@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 410" role="img" aria-labelledby="title desc">
+<title id="title">HP ZBook Fury 17 G7 dual-disk OpenCore setup</title>
+<desc id="desc">HP ZBook Fury 17 G7 with two independent physical drives. A bootable OCUSB launches macOS Sequoia on the 256 GB SATA SSD, while Windows remains on a separate 512 GB NVMe SSD.</desc>
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#0e172e"/><stop offset="1" stop-color="#172a45"/></linearGradient>
+<linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#3bd3a3"/><stop offset="1" stop-color="#76b7ff"/></linearGradient>
+</defs>
+<rect x="0" y="0" width="1200" height="410" rx="24" fill="url(#bg)"/>
+<rect x="36" y="35" width="8" height="45" rx="4" fill="url(#accent)"/>
+<text x="62" y="63" fill="#f5f9ff" font-family="Arial,sans-serif" font-size="27" font-weight="bold">HP ZBook Fury 17 G7 · OpenCore / Sequoia 15.8.1</text>
+<text x="62" y="99" fill="#adc2d7" font-family="Arial,sans-serif" font-size="16">Physical dual-disk layout · macOS and Windows stay independent</text>
+<rect x="60" y="160" width="295" height="174" rx="16" fill="#1f3756" stroke="#4d8fb8" stroke-width="2"/>
+<text x="83" y="199" fill="#f2f7fc" font-family="Arial,sans-serif" font-size="22" font-weight="bold">Bootable OCUSB</text>
+<text x="83" y="233" fill="#c3d7e8" font-family="Arial,sans-serif" font-size="16">OpenCore bootloader</text>
+<text x="83" y="261" fill="#c3d7e8" font-family="Arial,sans-serif" font-size="16">Known-good test path</text>
+<text x="83" y="299" fill="#61e0b5" font-family="Arial,sans-serif" font-size="16">Backlight: -igfxblr</text>
+<path d="M 360 247 L 445 247" stroke="#6ed5be" stroke-width="4" fill="none"/>
+<path d="M 431 237 L 446 247 L 431 257" stroke="#6ed5be" stroke-width="4" fill="none"/>
+<rect x="455" y="160" width="318" height="174" rx="16" fill="#1a403f" stroke="#56c4ac" stroke-width="2"/>
+<text x="478" y="199" fill="#f2f7fc" font-family="Arial,sans-serif" font-size="22" font-weight="bold">macOS Sequoia</text>
+<text x="478" y="234" fill="#d4f2e9" font-family="Arial,sans-serif" font-size="17">256 GB SATA SSD · SSDAS256</text>
+<text x="478" y="265" fill="#d4f2e9" font-family="Arial,sans-serif" font-size="16">Intel UHD 630 · Metal 3</text>
+<text x="478" y="298" fill="#a3ebdc" font-family="Arial,sans-serif" font-size="14">Internal EFI final test: pending</text>
+<rect x="804" y="160" width="338" height="174" rx="16" fill="#203654" stroke="#5e8dde" stroke-width="2"/>
+<text x="827" y="199" fill="#f2f7fc" font-family="Arial,sans-serif" font-size="22" font-weight="bold">Windows</text>
+<text x="827" y="234" fill="#cfdef2" font-family="Arial,sans-serif" font-size="17">512 GB NVMe · MTFDHBA512TDV</text>
+<text x="827" y="268" fill="#cfdef2" font-family="Arial,sans-serif" font-size="16">Separate physical SSD and EFI</text>
+<text x="827" y="298" fill="#94bcfb" font-family="Arial,sans-serif" font-size="14">Untouched by macOS install</text>
+<text x="600" y="378" fill="#b5c8dd" text-anchor="middle" font-family="Arial,sans-serif" font-size="16">Documentation-only release · No private SMBIOS or complete EFI published</text>
+</svg>
