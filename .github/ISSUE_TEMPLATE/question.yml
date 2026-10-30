@@ -1,0 +1,16 @@
+name: Question / سؤال أو طلب مساعدة
+description: Ask about this tested ZBook build or documentation. The maintainer replies when available.
+title: "[QUESTION] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please check the FAQ and existing issues first. Support is best-effort.
+        Never share live EFI files or serial identifiers.
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question / سؤالك
+      description: Explain your hardware and what you need to know.
+    validations:
+      required: true

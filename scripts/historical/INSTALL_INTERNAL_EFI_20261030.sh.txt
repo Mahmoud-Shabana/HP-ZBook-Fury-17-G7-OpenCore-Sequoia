@@ -1,0 +1,101 @@
+# HISTORICAL RECORD ONLY — DO NOT EXECUTE.
+# This original file can mount and overwrite an EFI partition, and contains a known
+# macOS path error: /usr/bin/sync (it should have used sync from PATH).
+# Preserved to accurately document the actual experiment; not an installation guide.
+# On other hardware this script could modify the wrong disk.
+
+#!/bin/bash
+# HP ZBook Fury 17 G7 -- copy current WORKING OCUSB EFI to dedicated 256GB SSD EFI.
+# Windows 512GB NVMe partition is never mounted or written.
+set -euo pipefail
+USB="/Volumes/OCUSB"
+SOURCE="$USB/EFI"
+EXPECTED_BYTES="256060514304"
+LOG="$USB/INSTALL_INTERNAL_EFI_RESULT.txt"
+PLISTBUDDY="/usr/libexec/PlistBuddy"
+DISKUTIL="/usr/sbin/diskutil"
+DITTO="/usr/bin/ditto"
+
+note() { printf '%s\n' "$*" | /usr/bin/tee -a "$LOG"; }
+: > "$LOG"
+note "=== HP ZBook Fury 17 G7: OpenCore EFI transfer ==="
+note "Time: $(date)"
+if [[ ! -d "$SOURCE/OC" || ! -f "$SOURCE/OC/config.plist" || ! -f "$SOURCE/OC/OpenCore.efi" || ! -f "$SOURCE/BOOT/BOOTx64.efi" ]]; then
+  note "ERROR: OCUSB EFI is incomplete. Nothing copied."
+  exit 2
+fi
+if [[ ! -x "$PLISTBUDDY" ]]; then
+  note "ERROR: macOS PlistBuddy unavailable. Nothing copied."
+  exit 3
+fi
+matches=()
+for i in {0..19}; do
+  d="disk$i"
+  t="$(/usr/bin/mktemp -t oc_disk_info)"
+  if "$DISKUTIL" info -plist "$d" > "$t" 2>/dev/null; then
+    size="$("$PLISTBUDDY" -c 'Print :TotalSize' "$t" 2>/dev/null || true)"
+    whole="$("$PLISTBUDDY" -c 'Print :WholeDisk' "$t" 2>/dev/null || true)"
+    if [[ "$size" == "$EXPECTED_BYTES" && "$whole" == "true" ]]; then
+      matches+=("$d")
+    fi
+  fi
+  /bin/rm -f "$t"
+done
+if [[ "${#matches[@]}" -ne 1 ]]; then
+  note "ERROR: Expected exactly one 256060514304-byte whole disk, found ${#matches[@]}. No copy."
+  "$DISKUTIL" list | /usr/bin/tee -a "$LOG"
+  exit 4
+fi
+TARGET_DISK="${matches[0]}"
+TARGET_PART="${TARGET_DISK}s1"
+note "Selected whole disk: $TARGET_DISK (size $EXPECTED_BYTES bytes)"
+"$DISKUTIL" list "$TARGET_DISK" | /usr/bin/tee -a "$LOG"
+# Verify this is the known 3-partition macOS SSD, not NVMe/Windows.
+part_table="$("$DISKUTIL" list "$TARGET_DISK")"
+if [[ "$part_table" != *"EFI"* || "$part_table" != *"Apple_APFS"* || "$part_table" != *"Apple_HFS"* ]]; then
+  note "ERROR: Unexpected partition layout on $TARGET_DISK. Nothing copied."
+  exit 5
+fi
+t="$(/usr/bin/mktemp -t oc_efi_part_info)"
+"$DISKUTIL" info -plist "$TARGET_PART" > "$t" 2>/dev/null || { note "ERROR: EFI partition missing"; exit 6; }
+part_bytes="$("$PLISTBUDDY" -c 'Print :TotalSize' "$t" 2>/dev/null || true)"
+content="$("$PLISTBUDDY" -c 'Print :Content' "$t" 2>/dev/null || true)"
+/bin/rm -f "$t"
+if [[ "$part_bytes" != "209715200" || "$content" != "EFI" ]]; then
+  note "ERROR: $TARGET_PART not expected 200MB EFI partition (size=$part_bytes content=$content). Nothing copied."
+  exit 7
+fi
+note "Verified target EFI: $TARGET_PART (200MB EFI, standalone 256GB macOS SATA SSD)"
+note "Mounting EFI (macOS may request administrator password)..."
+sudo "$DISKUTIL" mount "$TARGET_PART" | /usr/bin/tee -a "$LOG"
+t="$(/usr/bin/mktemp -t oc_mounted_part_info)"
+"$DISKUTIL" info -plist "$TARGET_PART" > "$t"
+MOUNTPOINT="$("$PLISTBUDDY" -c 'Print :MountPoint' "$t" 2>/dev/null || true)"
+/bin/rm -f "$t"
+if [[ -z "$MOUNTPOINT" || "$MOUNTPOINT" == "/" || ! -d "$MOUNTPOINT" ]]; then
+  note "ERROR: Could not verify mounted EFI path. Nothing copied."
+  exit 8
+fi
+note "Mounted SSD EFI at: $MOUNTPOINT"
+STAMP="$(date +%Y%m%d_%H%M%S)"
+if [[ -d "$MOUNTPOINT/EFI" ]]; then
+  OLD="$USB/EFI_BACKUP_FROM_SSD_$STAMP"
+  note "Backing up original SSD EFI to: $OLD"
+  "$DITTO" "$MOUNTPOINT/EFI" "$OLD"
+  if [[ ! -d "$OLD" ]]; then note "ERROR: backup failed. Nothing copied."; exit 9; fi
+fi
+note "Copying working OCUSB EFI to internal SSD EFI..."
+sudo "$DITTO" "$SOURCE" "$MOUNTPOINT/EFI"
+for f in "OC/config.plist" "OC/OpenCore.efi" "BOOT/BOOTx64.efi"; do
+  if [[ ! -f "$MOUNTPOINT/EFI/$f" ]]; then note "ERROR: Missing file after copy: $f"; exit 10; fi
+  if ! /usr/bin/cmp -s "$SOURCE/$f" "$MOUNTPOINT/EFI/$f"; then
+    note "ERROR: File mismatch after copy: $f"; exit 11
+  fi
+done
+if [[ -d "$SOURCE/OC/Kexts" && -d "$MOUNTPOINT/EFI/OC/Kexts" ]]; then
+  note "Kext directories present on both volumes."
+fi
+/usr/bin/sync
+note "SUCCESS: Internal SSD EFI is copied and verified."
+note "Do NOT erase or unplug the USB until booting from SSD has been tested."
+note "Next boot: use HP F9 and select the SATA SSD's UEFI entry."

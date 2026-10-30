@@ -1,42 +1,87 @@
-name: HP ZBook Fury 17 G7 compatibility report
-description: Document a reproducible hardware behavior without sharing private serials or a raw EFI.
-title: "[Compatibility] "
-labels: []
+name: Bug report / الإبلاغ عن مشكلة
+description: Report a reproducible ZBook/OpenCore problem. The maintainer will review and reply when available.
+title: "[BUG] "
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        This project is device-specific. Please redact serial numbers, MLB, ROM, SystemUUID, tokens and private file paths before sharing.
+        Thanks for improving this HP ZBook Fury 17 G7 project! The maintainer reviews and responds to issues as available (best-effort support, no fixed response time).
+
+        **Privacy:** Do not attach real EFI, config.plist, SMBIOS serial, ROM, MLB, SystemUUID, full NVRAM dumps, tokens or signed-in account screenshots.
   - type: input
-    id: machine
+    id: hardware
     attributes:
-      label: Exact laptop model, BIOS and macOS version
-      placeholder: "HP ZBook Fury 17 G7, BIOS S92 ..., macOS ..."
+      label: Exact hardware / مواصفات الجهاز
+      description: Model, CPU, BIOS version and iGPU PCI ID.
+      placeholder: "HP ZBook Fury 17 G7 | i7-10850H | BIOS S92 01.25 | 8086:9BC4"
     validations:
       required: true
   - type: input
     id: panel
     attributes:
-      label: iGPU PCI ID, panel model and resolution
-      placeholder: "8086:9BC4, LGD063F, 1920x1080"
+      label: Panel and macOS version / الشاشة ونسخة الماك
+      placeholder: "LGD063F 1920x1080 | macOS Sequoia 15.8.1 | WhateverGreen 1.7.1"
     validations:
-      required: false
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Issue category / نوع المشكلة
+      options:
+        - Boot / الإقلاع
+        - Backlight or graphics / الإضاءة أو كرت الشاشة
+        - Audio / الصوت
+        - Wi-Fi or Bluetooth / الشبكات
+        - Battery, fans or heat / البطارية أو الحرارة
+        - USB or other hardware / بقية القطع
+        - Documentation or scripts / التوثيق والسكريبتات
+        - Other / أخرى
+    validations:
+      required: true
+  - type: dropdown
+    id: boot_source
+    attributes:
+      label: Boot source / الإقلاع من أين؟
+      options:
+        - OCUSB flash drive
+        - Internal macOS SATA SSD
+        - Other or unknown
+    validations:
+      required: true
   - type: textarea
     id: symptoms
     attributes:
-      label: Observed symptoms and reproduction steps
+      label: What happens? / وصف المشكلة
+      description: What did you expect, and what actually happens?
+      placeholder: "Apple logo lights up; then the backlight goes dark, but login appears under a flashlight."
     validations:
       required: true
   - type: textarea
-    id: outcome
+    id: steps
     attributes:
-      label: What was tested, and what worked or failed?
+      label: Reproduction steps / خطوات تكرار المشكلة
+      description: Include cold boot vs warm restart vs wake, exact boot flags if relevant (no personal identifiers).
     validations:
       required: true
   - type: textarea
-    id: logs
+    id: attempts
     attributes:
-      label: Redacted logs and observations
-      description: No full config.plist, serial IDs or account information.
+      label: What did you try? / الحلول التي جرّبتها
+      description: Describe any EFI backups and the actual results of tests.
     validations:
       required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted logs or photos / أدلة بدون معلومات خاصة
+      description: Never post full EFI, serial values or entire machine reports.
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation / تأكيد الخصوصية
+      options:
+        - label: I removed personal IDs, keys and raw EFI data from my report.
+          required: true

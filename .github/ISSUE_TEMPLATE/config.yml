@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: FAQ / الأسئلة الشائعة
+    url: https://github.com/Mahmoud-Shabana/HP-ZBook-Fury-17-G7-OpenCore-Sequoia/blob/main/docs/09-FAQ.md
+    about: Answers to common black-screen, graphics and installer questions.
