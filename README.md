@@ -1,115 +1,167 @@
-# HP ZBook Fury 17 G7 — OpenCore macOS Sequoia 15.8.1
+<div align="center">
 
-**Real-world installation notes, compatibility report and troubleshooting diary for an HP mobile workstation.**
+<img src="assets/hero.svg" width="100%" alt="HP ZBook Fury 17 G7 OpenCore Sequoia — project illustration" />
 
-[العربية — Arabic guide](README.ar.md) · [Hardware](docs/01-HARDWARE.md) · [Backlight fix](docs/03-GRAPHICS-BACKLIGHT-FIX.md) · [What works](docs/02-WHAT-WORKS.md)
+# HP ZBook Fury 17 G7 · OpenCore Sequoia
 
-![macOS Sequoia](https://img.shields.io/badge/macOS-Sequoia%2015.8.1-blue)
-![Intel UHD 630](https://img.shields.io/badge/Intel%20UHD%20630-Metal%203-success)
-![State](https://img.shields.io/badge/status-working%20USB%20boot%20%7C%20testing-yellow)
+**An evidence-led Hackintosh engineering journal. Real hardware, reproducible findings, no private EFI leaks.**
 
-> **Status — 30 October 2026:** macOS Sequoia runs on this machine with Metal 3 graphics acceleration, Intel Wi-Fi, internal speakers, and a working built-in 1080p panel. A real backlight problem showed a positive result with WhateverGreen **-igfxblr**, including a working brightness slider. **Repeat-boot stability, thermal sensors, battery features, sleep/wake, and final USB-free SSD boot still require verification.**
+[![macOS](https://img.shields.io/badge/macOS-Sequoia%2015.8.1-1c5485?style=flat-square)](docs/01-HARDWARE.md)
+[![Graphics](https://img.shields.io/badge/Intel%20UHD%20630-Metal%203-0b8068?style=flat-square)](docs/02-WHAT-WORKS.md)
+[![Backlight](https://img.shields.io/badge/backlight-positive%20test-c38a28?style=flat-square)](docs/03-GRAPHICS-BACKLIGHT-FIX.md)
+[![Release](https://img.shields.io/badge/EFI%20release-pending-576a7d?style=flat-square)](docs/07-PRIVACY-BEFORE-PUBLISHING.md)
+[![Language](https://img.shields.io/badge/docs-English%20%2B%20Arabic-5962ae?style=flat-square)](README.ar.md)
+
+**[العربية — Read in Arabic](README.ar.md)** · **[Compatibility](docs/02-WHAT-WORKS.md)** · **[Display fix](docs/03-GRAPHICS-BACKLIGHT-FIX.md)** · **[Diagnostics](docs/08-DIAGNOSTICS.md)** · **[Roadmap](docs/05-NEXT-STEPS.md)**
+
+</div>
+
+---
+
+> [!IMPORTANT]
+> **Status: 30 October 2026.** macOS Sequoia 15.8.1 is usable on the HP ZBook Fury 17 G7 with **Metal 3 accelerated Intel graphics, Wi-Fi and speakers**. Replacing WhateverGreen `-igfxblt` with `-igfxblr` was followed by a working physical brightness slider in a real test. **Repeated cold boots, sleep/wake, cooling and standalone SSD boot are not yet fully verified.**
 >
-> **No ready-to-flash EFI is distributed yet.** Every machine requires its own configuration and unique identifiers.
+> **There is no ready-to-flash EFI release.** Never use another machine's SMBIOS identifiers or overwrite the independent Windows NVMe EFI.
 
-![HP ZBook Fury 17 G7 boot drive layout](assets/boot-layout.svg)
+## Hardware / verified configuration
 
-## Exact tested hardware
+| Area | Actual hardware | Observed configuration |
+| :-- | :-- | :-- |
+| Machine | **HP ZBook Fury 17 G7** | BIOS S92 **01.25.00**, UMA graphics |
+| CPU | Intel **Core i7-10850H** | Comet Lake-H, 6 cores / 12 threads |
+| iGPU | Intel **UHD Graphics 630** | PCI **8086:9BC4**, **Metal 3**, 1536 MB VRAM |
+| dGPU | NVIDIA Quadro RTX 3000 6 GB | Not used for acceleration; power state unverified |
+| Display | **LGD063F** | Built-in **1920 × 1080, 60 Hz** |
+| Wi-Fi | Intel AX201 | **8086:06F0**, AirportItlwm 2.4.0 |
+| Audio | Realtek ALC285 | **10EC:0285**, AppleALC layout **33**, speakers work |
+| Memory | 16 GB | macOS sees full capacity |
+| macOS drive | **SSDAS256 SATA**, 256 GB | Separate physical SSD |
+| Windows drive | **MTFDHBA512TDV NVMe**, 512 GB | Separate EFI, must remain untouched |
+| macOS | **Sequoia 15.8.1 (24H32)** | SMBIOS model MacBookPro16,1; private IDs omitted |
 
-| Component | Configuration |
-| --- | --- |
-| Laptop | **HP ZBook Fury 17 G7** |
-| Processor | Intel Core i7-10850H, 6 cores / 12 threads, 2.70 GHz base |
-| Integrated graphics | Intel UHD Graphics 630, **8086:9BC4** |
-| Discrete GPU | NVIDIA Quadro RTX 3000 6 GB, not supported for macOS acceleration |
-| RAM | 16 GB |
-| Internal display | LG Display **LGD063F**, 1920 × 1080, 60 Hz |
-| Wi-Fi | Intel AX201, **8086:06F0** |
-| Sound | Realtek ALC285, **10EC:0285** |
-| macOS storage | Dedicated 256 GB SATA SSD, SSDAS256 |
-| Windows storage | Separate 512 GB NVMe SSD, MTFDHBA512TDV |
-| BIOS | HP S92 **01.25.00**, graphics option **UMA** |
-| OpenCore model identity | **MacBookPro16,1**, identifiers intentionally omitted |
-| OS | macOS Sequoia **15.8.1**, build **24H32** |
+<details><summary><strong>Kernel extensions observed in the positive session</strong></summary>
 
-## Compatibility matrix
-
-| Feature | Status | Evidence / caveat |
-| --- | --- | --- |
-| Boot from OpenCore USB | ✅ Tested | Working macOS desktop |
-| Intel UHD 630 acceleration | ✅ Tested | **Metal 3, 1536 MB dynamic VRAM** |
-| Built-in display | ✅ Tested | Native 1920 × 1080 at 60 Hz |
-| Backlight and brightness slider | 🟡 Positive | The -igfxblr session was illuminated and the slider changed actual panel brightness; cold-boot repetition pending |
-| Intel AX201 Wi-Fi | ✅ Tested | AirportItlwm 2.4.0 |
-| Built-in audio output | ✅ Tested | AppleALC 1.9.8, layout-id 33 |
-| Windows-like Arabic keyboard | ✅ Tested | macOS **Arabic – PC** input source |
-| CPU power management | ✅ Driver active | X86PlatformPlugin loaded |
-| USB-free internal SSD boot | ⏳ Pending | Internal EFI holds an older configuration; final backlight fix not independently verified |
-| Touchpad, battery, Bluetooth, webcam | ⏳ Incomplete | See [test checklist](docs/05-NEXT-STEPS.md) |
-| CPU temperature, fan speed | ⏳ Incomplete | VirtualSMC sensor interface returned invalid-key errors |
-| Sleep/wake | ⏳ Not tested | Needs backlight stability first |
-| Microphone | ➖ Out of scope | Owner does not require the built-in mic |
-
-## The hardest problem: black screen after the Apple logo
-
-The boot logo and progress bar were clearly visible. Then the internal LCD appeared black. However, a flashlight revealed the macOS login screen, Dock, and desktop; the machine also produced audio. **The panel was displaying an image without a working backlight**, rather than failing to boot entirely.
-
-There were multiple unsuccessful attempts involving framebuffer initialization, EDID, DisplayPort DPCD, PNLF ACPI configuration and the alternative WhateverGreen backlight fix. The best observed result came from switching the WhateverGreen boot argument from **-igfxblt** to **-igfxblr**, while retaining the exact graphics properties already proven to deliver Metal 3 acceleration.
-
-**Boot arguments observed in the positive macOS session:**
-
-~~~text
-keepsyms=1 debug=0x100 -wegnoegpu -igfxblr igfxonln=1
-~~~
-
-After boot, the owner confirmed the argument with the macOS nvram command, displayed an illuminated desktop and verified that **System Settings → Displays → Brightness** actually dimmed and brightened the physical panel. The diagnostic report also showed **AppleBacklightDisplay active**.
-
-**Do not claim a permanent cure based on this single successful session.** Cold-start, restart, lid close/open, and wake must be validated repeatedly.
-
-Read the [full graphics and backlight troubleshooting record](docs/03-GRAPHICS-BACKLIGHT-FIX.md).
-
-## Observed kext versions
-
-| Driver | Version |
+| Kext | Version |
 | --- | --- |
 | Lilu | 1.7.2 |
 | WhateverGreen | 1.7.1 |
 | VirtualSMC | 1.3.8 |
 | AppleALC | 1.9.8 |
-| AirportItlwm | 2.4.0 (Sequoia-compatible build) |
+| AirportItlwm | 2.4.0 |
 | USBToolBox | 1.2.0 |
 
-See [non-bootable graphics settings excerpt](examples/graphics-boot-settings.json). **It intentionally excludes EDID bytes and private SMBIOS fields.**
+This is a verified observation, not necessarily a complete working EFI inventory.
 
-## Documentation
+</details>
 
-- [01 — Verified hardware inventory](docs/01-HARDWARE.md)
-- [02 — Working and untested functions](docs/02-WHAT-WORKS.md)
-- [03 — Full graphics/backlight fix journal](docs/03-GRAPHICS-BACKLIGHT-FIX.md)
-- [04 — Power and thermals: readings versus hypotheses](docs/04-POWER-THERMALS.md)
-- [05 — Next steps and acceptance tests](docs/05-NEXT-STEPS.md)
-- [06 — Safe internal EFI transfer](docs/06-INTERNAL-EFI.md)
-- [07 — Privacy and publication safety](docs/07-PRIVACY-BEFORE-PUBLISHING.md)
-- [Arabic version](README.ar.md)
+## Compatibility at a glance
 
-## Next verification milestones
+| Feature | State | What we actually verified |
+| --- | :---: | --- |
+| Boot with OCUSB | ✅ | macOS reaches desktop |
+| GPU acceleration | ✅ | Intel UHD 630, Metal 3, 1536 MB |
+| Built-in 1080p screen | ✅ | Native resolution and 60 Hz |
+| Wi-Fi and speakers | ✅ | Connected network and audible output |
+| Backlight brightness slider | ✅¹ | Physically brightened and dimmed panel with `-igfxblr` |
+| Reliable backlight over multiple starts | 🟡 | **Still needs repeated tests** |
+| CPU power management | 🟡 | X86PlatformPlugin loaded; thermals not proven |
+| Battery, fans, sensors | 🟠 | Not fully operational/verified |
+| Bluetooth, camera, trackpad, sleep | ⚪ | Awaiting end-to-end tests |
+| Boot from internal SATA without USB | 🟠 | Final EFI not yet verified internally |
+| Built-in microphone | ➖ | Explicitly out of scope |
 
-1. Verify a lit login screen and brightness controls over several **cold starts and warm restarts**, then sleep/wake.
-2. Enable compatible temperature/fan readouts **without assuming that reported package power equals CPU temperature**; inspect GPU power-off state.
-3. Test Bluetooth pairing, camera, touchpad, battery behavior and ports.
-4. Copy the **exact final known-good** OpenCore EFI to the **macOS 256 GB SATA disk** and verify standalone boot. **Never modify the Windows 512 GB NVMe EFI.**
-5. Consider publishing only a **tested and sanitized example EFI** after removing sensitive SMBIOS/ROM/UUID data, and checking the exact public ZIP.
+<sub>¹ A positive test is not a permanent-fix guarantee. Full [compatibility matrix](docs/02-WHAT-WORKS.md).</sub>
 
-## Upstream references
+## Case study · When the screen is black but macOS has booted
 
-- [Dortania: OpenCore laptop guide](https://dortania.github.io/OpenCore-Install-Guide/config-laptop.plist/coffee-lake-plus.html)
-- [Dortania: ACPI](https://dortania.github.io/Getting-Started-With-ACPI/)
-- [WhateverGreen source and README](https://github.com/acidanthera/WhateverGreen)
-- [VirtualSMC](https://github.com/acidanthera/VirtualSMC)
-- [OpenIntelWireless / itlwm](https://github.com/OpenIntelWireless/itlwm)
+The Apple logo and loading bar were **illuminated**. The screen then went black — but shining a flashlight onto it revealed the **login form and Dock**. Audio and keyboard were still responding. That distinguishes a **failed LCD backlight** from a missing framebuffer image.
 
-## Legal and privacy
+| Iteration | Observed result |
+| --- | --- |
+| Legacy VESA fallback | Desktop visible, ~7 MB VRAM, **no Metal** |
+| Native Intel acceleration without correct display timing | Black screen or panic during some attempts |
+| DPCD limit + panel EDID + framebuffer properties | **Full Metal 3** at 1920 × 1080 |
+| `igfxonln=1` | Apple logo visibly improved; login backlight still intermittent |
+| PNLF changes plus `-igfxblt` | Black login screen persisted |
+| **Substitute `-igfxblr`** | **Positive test**: illuminated desktop and working brightness slider |
 
-Personal hardware compatibility research; not affiliated with Apple, HP or Dortania. macOS has license restrictions; check the applicable terms. No Apple installers, proprietary Apple binaries, private SMBIOS identifiers or firmware dumps are distributed. A sanitized example EFI is **not** automatically bootable on other machines.
+**Boot arguments observed on the successful session:**
 
-**Contributions are welcome:** include full hardware IDs, a reproducible test case and redacted diagnostics. Never post serial numbers, ROM/MLB/UUID, tokens or unredacted config.plist files.
+~~~text
+keepsyms=1 debug=0x100 -wegnoegpu -igfxblr igfxonln=1
+~~~
+
+<details><summary><strong>Expand the verified Intel framebuffer values (not a complete EFI)</strong></summary>
+
+~~~text
+DeviceProperties / Add / PciRoot(0x0)/Pci(0x2,0x0)
+AAPL,ig-platform-id                  00009b3e
+framebuffer-patch-enable             01000000
+framebuffer-stolenmem                00003001
+framebuffer-fbmem                    00009000
+enable-dpcd-max-link-rate-fix        01000000
+dpcd-max-link-rate                   0a000000
+AAPL00,override-no-connect           [LGD063F-specific EDID omitted]
+~~~
+
+The EDID and framebuffer values are panel-specific; do not transplant blindly. See the [non-bootable example](examples/graphics-boot-settings.json).
+
+</details>
+
+> [!NOTE]
+> [WhateverGreen](https://github.com/acidanthera/WhateverGreen/blob/master/README.md) defines **`-igfxblr`** as its Backlight Registers Fix and **`-igfxblt`** as the Alternative Fix. Its [backlight FAQ](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) documents the difference and caveats on modern macOS. **Our observed result is specific to this exact setup.**
+
+**[Explore the full diagnosis, failures, corrections and acceptance checks →](docs/03-GRAPHICS-BACKLIGHT-FIX.md)**
+
+## Why the two drives matter
+
+![OpenCore USB booting macOS from a 256 GB SATA disk alongside isolated Windows on a 512 GB NVMe disk](assets/boot-layout.svg)
+
+The **known-good USB** is the current reference. The internal SSD received an older EFI, but it has **not yet been independently verified with the final `-igfxblr` configuration**. [Safe internal EFI protocol](docs/06-INTERNAL-EFI.md).
+
+## Evidence, not assumptions
+
+| Audit item | Actual observation | Limitation |
+| --- | --- | --- |
+| CPU package estimate | **2.61 W** sample | Not total laptop consumption or CPU temperature |
+| CPU idle snapshot | **84.24%** | Does not prove cool operation under workload |
+| X86PlatformPlugin | Active | Power optimization not fully characterized |
+| Thermal pressure | Nominal in sample | Not a full thermal evaluation |
+| SMC sensors | Repeated *Invalid key detected!* | **No real CPU temperature / fan RPM obtained** |
+| AppleBacklightDisplay | Active after bright boot | Cold-boot reliability still to be tested |
+
+[Read the measured thermal report](docs/04-POWER-THERMALS.md) · [Run read-only diagnostics](docs/08-DIAGNOSTICS.md).
+
+## Documentation index
+
+| Guide | What's inside |
+| --- | --- |
+| [Hardware inventory](docs/01-HARDWARE.md) | Panel, CPU, PCI IDs, physical disks and BIOS |
+| [Compatibility matrix](docs/02-WHAT-WORKS.md) | **Tested / partial / untested**, no inflated claims |
+| [Backlight deep dive](docs/03-GRAPHICS-BACKLIGHT-FIX.md) | Flashlight discovery, `-igfxblr` and unsuccessful variants |
+| [Power and thermals](docs/04-POWER-THERMALS.md) | What the audit can and cannot prove |
+| [Release gates](docs/05-NEXT-STEPS.md) | Tests needed for everyday stability |
+| [Internal EFI safety](docs/06-INTERNAL-EFI.md) | SATA-only verification; protect Windows |
+| [Privacy policy](docs/07-PRIVACY-BEFORE-PUBLISHING.md) | Never leak personal SMBIOS data |
+| [Diagnostics](docs/08-DIAGNOSTICS.md) | Reproducible, read-only commands |
+| [FAQ](docs/09-FAQ.md) | Symptoms, hardware differences and next steps |
+
+## Release roadmap
+
+- [ ] Verify backlight at **3 restarts + 2 cold boots**, without flashlight.
+- [ ] Verify lid sleep/wake, display brightness and network recovery.
+- [ ] Measure **actual** CPU temperature, fan activity and dGPU power state.
+- [ ] Test battery, Bluetooth, trackpad, webcam and ports.
+- [ ] Copy **exact final USB EFI** to the macOS SATA SSD after backup.
+- [ ] Boot with **USB disconnected**; keep Windows NVMe untouched.
+- [ ] Review and sanitize every binary and identifier before any public EFI release.
+
+[**Display + boot milestone #1**](../../issues/1) · [**Thermals + peripherals #2**](../../issues/2).
+
+## Contributing & acknowledgements
+
+This is a research diary for **one real HP workstation**, not a universal EFI. See [CONTRIBUTING](CONTRIBUTING.md), [SECURITY](SECURITY.md) and [CHANGELOG](CHANGELOG.md). Thanks to the [Dortania OpenCore guides](https://dortania.github.io/OpenCore-Install-Guide/), [WhateverGreen](https://github.com/acidanthera/WhateverGreen), [VirtualSMC](https://github.com/acidanthera/VirtualSMC) and the wider Hackintosh community.
+
+No Apple installers, macOS images, Apple proprietary binaries, private firmware dumps, or live SMBIOS identifiers are included. Check the applicable macOS license terms.
+
+<div align="center"><sub>Evidence last updated 30 October 2026 · Made for accurate reproducibility, not a misleading "100% working" claim.</sub></div>
