@@ -40,6 +40,12 @@
 
 **Experiencing the flashlight-only black screen or another hardware issue?** [Open an issue](docs/11-BUG-REPORTS-AND-SUPPORT.md) with redacted hardware details. **The maintainer reviews and replies to bugs when available**; support is best-effort.
 
+### Step-by-step installation case study
+
+**[Read the full setup from installer download → USB OpenCore → accelerated graphics → -igfxblr backlight → Wi-Fi and audio → pending internal SSD boot](docs/13-FULL-INSTALLATION-CASE-STUDY.md).**
+
+This separates **steps actually performed** from actions not yet proven safe or stable. The original macOS download, SHA verification, all publicly safe scripts, and bug-report form are linked above.
+
 ## Hardware / verified configuration
 
 | Area | Actual hardware | Observed configuration |

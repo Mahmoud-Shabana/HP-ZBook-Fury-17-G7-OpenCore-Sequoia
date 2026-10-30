@@ -19,6 +19,8 @@ This repo contains **actual diagnostic scripts recovered from the tested OCUSB**
 
 We used additional machine-specific Python and shell scripts while debugging. Some scripts from those experimental iterations contain raw-disk writes, old EFI values, fragile path assumptions, or could cause data loss on another laptop. They are **not provided as a convenient run-all installer**. The historically used internal EFI transfer is included in non-executable text form with a severe warning and bug explanation.
 
+For a narrated sequence, also read the [full installation case study](13-FULL-INSTALLATION-CASE-STUDY.md). Original images, bootloader binaries and private EFI are intentionally not mirrored.
+
 See the [exact third-party full-installer source and credit](10-INSTALLER-SOURCE.md). We link to the upstream image builder instead of copying that GPL-3.0 project and redistributing an Apple installer.
 
 ## Data safety
